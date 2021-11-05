@@ -1,0 +1,91 @@
+html, body {
+  height: 100%;
+}
+
+html {
+  display: table;
+  margin: auto;
+}
+
+h1 {
+  font-family: monospace;
+  font-size: 100px;
+  color: #CAB8FF;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+p {
+  font-family: monospace;
+  color: #7F7C82;
+}
+
+#color1 {
+  color: #CAB8FF;
+}
+
+#color2 {
+  color: #FCFFA6;
+}
+#color3 {
+  color: #7F7C82;
+}
+
+body {
+  background-color: #C1FFD7;
+}
+
+table {
+  border-style: dotted;
+  border-radius: 10px;
+  border-color: #FCFFA6;
+  border-width: 10px;
+}
+
+.textcenter {
+  text-align: center;
+}
+
+img {
+  width: 200px;
+  height: 200px;
+  background-color: #C1FFD7;
+  position: relative;
+  border-radius: 10px;
+  animation-name: example;
+  animation-duration: 4s;
+  animation-iteration-count: 3;
+  animation: example 2s infinite alternate ease-in-out;
+}
+
+@keyframes example {
+  0% {
+    background-color: #C1FFD7;
+    left: 0px;
+    top: 0px;
+  }
+
+  25% {
+    background-color: #7F7C82;
+    left: 200px;
+    top: 0px;
+  }
+
+  50% {
+    background-color: #CAB8FF;
+    left: 200px;
+    top: 200px;
+  }
+
+  75% {
+    background-color: #FCFFA6;
+    left: 0px;
+    top: 200px;
+  }
+
+  100% {
+    background-color: #C1FFD7;
+    left: 0px;
+    top: 0px;
+  }
+}

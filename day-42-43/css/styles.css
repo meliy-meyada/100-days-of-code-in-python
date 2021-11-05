@@ -1,0 +1,26 @@
+body {
+  background-color: #FEFBF3;
+}
+
+img {
+  border-radius: 15px 50px;
+  width: 200px;
+  height: 200px;
+
+}
+p,th,td,li,a,title,form {
+  font-family:verdana;
+
+}
+h1,h3 {
+  font-family:verdana;
+  color: #79B4B7;
+}
+hr {
+  border-style: none;
+  border-top-style: dotted;
+  width: 3%;
+  border-color: grey;
+  border-width: 5px;
+
+}
