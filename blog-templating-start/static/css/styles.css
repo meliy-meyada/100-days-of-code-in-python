@@ -8,7 +8,7 @@ body{
 .wrapper{
   position: relative;
   clear:both;
-  margin: 0 auto 75px auto;
+  margin: 0 auto 75px;
   width: 100%;
   overflow: hidden;
 }
@@ -20,7 +20,7 @@ body{
 
 .top .title {
   width: 700px;
-  margin: 38px auto 0 auto; 
+  margin: 38px auto 0; 
 }
 
 .title h1 {
@@ -39,7 +39,7 @@ body{
   background: #fff;
   padding:50px;
   width: 600px;
-  margin: 20px auto 0 auto;
+  margin: 20px auto 0;
   box-shadow: 0 2px 4px rgba(100,100,100,.1);
 }
 
