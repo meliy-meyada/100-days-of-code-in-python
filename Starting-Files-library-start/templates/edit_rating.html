@@ -1,0 +1,27 @@
+{% extends 'bootstrap/base.html' %}
+{% block styles %}
+{{ super() }}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+{% block title %}My Library{% endblock %}
+
+{% block content %}
+    <div class="header" style="justify-content: center ">
+     <h1>My Library</h1>
+    </div>
+        <div class="container">
+
+          <div class="form">
+            <div class="form-group">
+                 <form action="{{ url_for('edit') }}" method="POST">
+                    <p>Book Name: {{book.title}}</p>
+                    <p>Current Rating {{book.rating}}</p>
+                     <input hidden="hidden" name="id" value="{{book.id}}">
+                    <input name="rating" type="text" placeholder="New Rating">
+                    <button class="btn btn-block" type="submit">Change Rating</button>
+                </form>
+            </div>
+          </div>
+        </div>
+
+{% endblock %}

@@ -1,20 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Library</title>
-</head>
-<body>
-<h1>My Library</h1>
-    {% if len(books) != 0 %}
-    <ul>
-        {% for book in books %}
-        <li>{{ book.title }} - {{ book.author }} - {{ book.rating }}/10</li>
-        {% endfor %}
-    </ul>
-    {% else %}
-        <p>Library is empty.</p>
-    {% endif %}
-<a href="{{ url_for('add') }}">Add New Book</a>
-</body>
-</html>
+{% extends 'bootstrap/base.html' %}
+{% block styles %}
+{{ super() }}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+{% block title %}My Library{% endblock %}
+
+{% block content %}
+    <div class="header" style="justify-content: center ">
+     <h1>My Library</h1>
+    </div>
+        <div class="container">
+
+          <div class="form">
+            <div class="form-group">
+                {% if books == []: %}
+                <p>Library is empty.</p>
+                {% endif %}
+            <ul>
+                {% for book in books %}
+                <li>
+
+                    <h3><a href="{{ url_for('delete', id=book.id) }}">Delete</a></h3>
+                    <h4>{{book.title}} - {{book.author}} - {{book.rating}}/10</h4>
+                    <h3><a href="{{ url_for('edit', id=book.id) }}">Edit Rating</a></h3>
+                </li>
+                {% endfor %}
+            </ul>
+
+                <a href="{{ url_for('add') }}" class="btn btn-block">Add New Book</a>
+
+            </div>
+          </div>
+        </div>
+
+{% endblock %}
