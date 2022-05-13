@@ -8,12 +8,14 @@ app = Flask(__name__)
 Bootstrap(app)
 
 
-all_books = []
+all_books = [
+
+]
 
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template("index.html", books=all_books, len=len)
 
 
 @app.route("/add")
