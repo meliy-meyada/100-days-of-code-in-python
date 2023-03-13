@@ -1,0 +1,9 @@
+
+*.pyc
+*.iml
+*.xml
+*.xml
+*.xml
+quizzler-app-start/quiz_brain.py
+.idea/vcs.xml
+*.iml
