@@ -1,0 +1,2 @@
+# 100 days of code in Python
+This course is a comprehensive online course that aims to teach Python programming from beginner to advanced level over the course of 100 days. The course is designed to be hands-on and project-based, with students completing multiple coding projects throughout the course. The course is taught by Angela Yu, a seasoned developer and educator, who has years of experience teaching programming to students of all levels.
