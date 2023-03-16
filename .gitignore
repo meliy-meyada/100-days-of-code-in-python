@@ -12,3 +12,4 @@ quizzler-app-start/quiz_brain.py
 .idea/vcs.xml
 *.iml
 >>>>>>> future-ideas
+.DS_Store
