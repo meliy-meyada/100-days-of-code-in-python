@@ -71,9 +71,21 @@ def post_new_cafe():
     )
     db.session.add(new_cafe)
     db.session.commit()
-    return jsonify(response={"success":"Successfully and added the new cafe."})
+    return jsonify(response={"success": "Successfully and added the new cafe."})
 
 ## HTTP PUT/PATCH - Update Record
+@app.route("/update-price/<int:cafe_id>", methods=["PATCH"])
+def patch_new_price(cafe_id):
+    new_price = request.args.get("new_price")
+    cafe = db.session.query(Cafe).get(cafe_id)
+    if cafe:
+        cafe.coffee_price = new_price
+        db.session.commit()
+        # 200 = Ok
+        return jsonify(response={"success": "Successfully updated the price."}), 200
+    else:
+        # 404 = Resource not found
+        return jsonify(error={"Not Found": "Sorry a cafe with that id was not found in the database."}), 404
 
 ## HTTP DELETE - Delete Record
 
