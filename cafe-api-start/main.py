@@ -55,7 +55,23 @@ def get_search_cafe():
     else:
         return jsonify(error = {"Not Found" : "Sorry, We don't have a cafe at that location."})
 
-## HTTP POST - Create Record
+## HTTP POST - Create Record,
+@app.route("/add", methods=["POST"])
+def post_new_cafe():
+    new_cafe = Cafe(
+        name=request.form.get("name"),
+        map_url=request.form.get("map_url"),
+        img_url=request.form.get("img_url"),
+        locattion=request.form.get("loc"),
+        has_sockets=bool(request.form.get("sockets")),
+        has_toilet=bool(request.form.get("toilet")),
+        has_wifi=bool(request.form.get("wifi")),
+        seats=request.form.get("seats"),
+        coffee_price=request.form.get("coffee_price"),
+    )
+    db.session.add(new_cafe)
+    db.session.commit()
+    return jsonify(response={"success":"Successfully and added the new cafe."})
 
 ## HTTP PUT/PATCH - Update Record
 
