@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
-
+from datetime import date
 
 # Delete this code:
 # import requests
@@ -52,9 +52,9 @@ def get_all_posts():
     return render_template("index.html", all_posts=posts)
 
 
-@app.route("/post/<int:index>")
-def show_post(index):
-    requested_post = BlogPost.query.filter_by(id=index).first()
+@app.route("/post/<int:post_id>")
+def show_post(post_id):
+    requested_post = BlogPost.query.get(post_id)
     # for blog_post in posts:
     #     if blog_post["id"] == index:
     #         requested_post = blog_post
@@ -63,7 +63,39 @@ def show_post(index):
 @app.route("/new-post", methods=["GET", "POST"])
 def add_new_post():
     form = CreatePostForm()
+    if form.validate_on_submit():
+        new_post = BlogPost(
+            title=form.title.data,
+            subtitle=form.subtitle.data,
+            body=form.body.data,
+            img_url=form.img_url.data,
+            author=form.author.data,
+            date=date.today().strftime("%B %d, %Y")
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for("get_all_posts"))
     return render_template("make-post.html", form=form)
+
+@app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
+def edit_post(post_id):
+    post = BlogPost.query.get(post_id)
+    edit_form = CreatePostForm(
+        title=post.title,
+	    subtitle=post.subtitle,
+	    img_url=post.img_url,
+	    author=post.author,
+	    body=post.body
+   )
+    if edit_form.validate_on_submit():
+        post.title = edit_form.title.data
+        post.subtitle = edit_form.subtitle.data
+        post.img_url = edit_form.img_url.data
+        post.author = edit_form.author.data
+        db.session.commit()
+        return redirect(url_for("show_post", post_id=post.id))
+    return render_template("make-post.html", form=edit_form, is_edit=True)
+    
 
 @app.route("/about")
 def about():
