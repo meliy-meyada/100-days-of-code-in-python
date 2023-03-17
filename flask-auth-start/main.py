@@ -57,11 +57,9 @@ def secrets():
 def logout():
     pass
 
-
-@app.route('/download')
+@app.route('/download', methods=["GET"])
 def download():
-    pass
-
+    return send_from_directory('static', filename="files/cheat_sheet.pdf")
 
 if __name__ == "__main__":
     app.run(debug=True)
