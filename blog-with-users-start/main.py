@@ -42,7 +42,7 @@ class User(UserMixin, db.Model):
 
     # this will act like a List of BlogPost objects attached to each User.
     # the "author" refers to author property in the BlogPost class.
-    posts = relationship("BlogPost", back_populates="author")
+    posts = db.relationship("BlogPost", back_populates="author")
 
 
 ##CONFIGURE TABLES
@@ -53,7 +53,7 @@ class BlogPost(UserMixin, db.Model):
     # create foreign Key, "user.id" the users refers to the tablename of User.
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     # create reference to the User object, the "posts" refers to the posts property in the User class.
-    author = relationship("User", back_populates="posts")
+    author = db.relationship("User", back_populates="posts")
 
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
@@ -67,7 +67,7 @@ class Comments(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
 # Create all the tables in the database.
-db.create_all()
+# db.create_all()
 
 
 #Create admin-only decorator
