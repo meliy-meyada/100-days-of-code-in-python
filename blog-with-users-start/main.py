@@ -30,6 +30,8 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
+
 ##User Table
 class User(UserMixin, db.Model):
     __tablename__="users"
@@ -38,21 +40,47 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100))
     name = db.Column(db.String(100))
 
-# Create all the tables in the database.
-db.create_all()
+    # this will act like a List of BlogPost objects attached to each User.
+    # the "author" refers to author property in the BlogPost class.
+    posts = relationship("BlogPost", back_populates="author")
+
 
 ##CONFIGURE TABLES
-
-class BlogPost(db.Model):
+class BlogPost(UserMixin, db.Model):
     __tablename__ = "blog_posts"
     id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.String(250), nullable=False)
+
+    # create foreign Key, "user.id" the users refers to the tablename of User.
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    # create reference to the User object, the "posts" refers to the posts property in the User class.
+    author = relationship("User", back_populates="posts")
+
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
+
+
+class Comments(UserMixin, db.Model):
+    __tablename__="comments"
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+# Create all the tables in the database.
 db.create_all()
+
+
+#Create admin-only decorator
+#Protect Routes by making Decorators
+def admin_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        #If user current user isnt authenticated or id is not 1 then return abort with 403 error
+        if current_user.id != 1 or not current_user.is_authenticated:
+            return abort(403)
+        #Otherwise continue with the route function
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @app.route('/')
@@ -67,6 +95,7 @@ def register():
     if form.validate_on_submit():
         # If user's email alrady exists
         if User.query.filter_by(email=form.email.data).first():
+            print(User.query.filter_by(email=form.email.data).first())
             # send flash messages
             flash("You've already signed with that email, login instead!")
             # Redirect to/login route
@@ -116,7 +145,6 @@ def login():
 
 
 @app.route('/logout')
-@login_required
 def logout():
     logout_user()
     return redirect(url_for('get_all_posts'))
@@ -138,20 +166,7 @@ def contact():
     return render_template("contact.html", current_user=current_user)
 
 
-# Create admin-only decorator
-def admin_only(f):
-    @wraps(f)
-    def decorated_function():
-        # Otherwise continue with the route fucntion
-        if current_user.id == 1:
-            return f()
-        else:
-        # if id iss not 1 then abort with 403 error
-            return abort(403)
-    return decorated_function
-
 @app.route("/new-post", methods=["GET", "POST"])
-@login_required
 # Mark with decorator
 @admin_only
 def add_new_post():
@@ -172,7 +187,6 @@ def add_new_post():
 
 
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
-@login_required
 @admin_only
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
@@ -196,7 +210,6 @@ def edit_post(post_id):
 
 
 @app.route("/delete/<int:post_id>")
-@login_required
 @admin_only
 def delete_post(post_id):
     post_to_delete = BlogPost.query.get(post_id)
