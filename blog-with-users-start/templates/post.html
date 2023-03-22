@@ -43,20 +43,20 @@
           {{ ckeditor.config(name='comment_text') }}
           {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
           <div class="col-lg-8 col-md-10 mx-auto comment">
-
+            {% for comment in post.comments: %}
               <ul class="commentList">
                 <li>
                     <div class="commenterImage">
                       <img src="https://gist.github.com/angelabauer/223c5e4e1a2ecd0f232f18ab3471733a"/>
                     </div>
                     <div class="commentText">
-                      <p>Some comment</p>
-                      <span class="date sub-text">comment author name</span>
+                      {{ comment.text|safe }}
+                      <span class="date sub-text">{{ comment.comment_author.name }}</span>
 
                     </div>
                 </li>
               </ul>
-
+              {% endfor %}
             </div>
           </div>
       </div>
