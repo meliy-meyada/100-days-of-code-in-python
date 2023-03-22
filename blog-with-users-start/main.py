@@ -179,7 +179,7 @@ def show_post(post_id):
 
         new_comment = Comment(
             text=form.comment_text.data,
-            comment_author=current_user,
+            comment_author=current_user.id,
             parent_post=requested_post
         )
         db.session.add(new_comment)
