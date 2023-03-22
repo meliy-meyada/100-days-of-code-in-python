@@ -11,7 +11,7 @@ from flask_gravatar import Gravatar
 from functools import wraps
 
 # import RegisterForm form forms.py
-from forms import CreatePostForm, RegisterForm, LoginForm
+from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -42,7 +42,11 @@ class User(UserMixin, db.Model):
 
     # this will act like a List of BlogPost objects attached to each User.
     # the "author" refers to author property in the BlogPost class.
-    posts = db.relationship("BlogPost", back_populates="author")
+    posts = relationship("BlogPost", back_populates="author")
+
+    # add parent relationship
+    # comment_author refersn to the comment_author property in the comment class.
+    comments = relationship("Comment", back_populates="comment_author")
 
 
 ##CONFIGURE TABLES
@@ -53,21 +57,34 @@ class BlogPost(UserMixin, db.Model):
     # create foreign Key, "user.id" the users refers to the tablename of User.
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     # create reference to the User object, the "posts" refers to the posts property in the User class.
-    author = db.relationship("User", back_populates="posts")
+    author = relationship("User", back_populates="posts")
 
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
+    # Parent relationship
+    comments = relationship("Comment", back_populates="parent_post")
 
 
-class Comments(UserMixin, db.Model):
+class Comment(db.Model):
     __tablename__="comments"
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
+
+    # Add child relationship
+    #  users.id the users to the tablename of the class.
+    # comments refers to the comments property in the User class.
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    comment_author = relationship("User", back_populates="comments")
+
+    # Child relationship
+    post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
+    parent_post = relationship("BlogPost", back_populates="comments")
+    text = db.Column(db.Text, nullable=False)
 # Create all the tables in the database.
-# db.create_all()
+db.create_all()
 
 
 #Create admin-only decorator
@@ -152,8 +169,9 @@ def logout():
 
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
+    comment_form = CommentForm()
     requested_post = BlogPost.query.get(post_id)
-    return render_template("post.html", post=requested_post, current_user=current_user)
+    return render_template("post.html", post=requested_post, current_user=current_user, form=comment_form)
 
 
 @app.route("/about")
