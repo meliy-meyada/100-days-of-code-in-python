@@ -47,7 +47,7 @@
               <ul class="commentList">
                 <li>
                     <div class="commenterImage">
-                      <img src="https://gist.github.com/angelabauer/223c5e4e1a2ecd0f232f18ab3471733a"/>
+                      <img src="{{ comment.comment_author.email | gravatar }}"/>
                     </div>
                     <div class="commentText">
                       {{ comment.text|safe }}
